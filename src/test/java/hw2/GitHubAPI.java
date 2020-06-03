@@ -190,5 +190,19 @@ public void descOrderByFullName() {
 //            • Path param org with value cucumber
 //2. Verify that by default all repositories are listed in descending order based on the value of the field
 //    created_at
+@Test
+@DisplayName("Default sort")
+public void defaultSort() {
+    Response response =
+            given().
+                    pathParam("org", "cucumber").
+                    when().
+                    get("/orgs/{org}/repos").prettyPeek();
 
+    List<String> dates = response.jsonPath().getList("created_at");
+    List<String> sortedDates = new ArrayList<>(dates);
+    Collections.sort(sortedDates, Collections.reverseOrder());
+
+    assertEquals(sortedDates, dates);
+}
 }
